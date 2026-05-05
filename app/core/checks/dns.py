@@ -5,7 +5,6 @@ class DNSChecker:
     '''
         - takes input then kukunin lang natin / convert yung DNS to IP with socket pkg
     '''
-
     def _check_sync(self, hostname: str) -> dict:
         print(">>> resolving:", hostname)
         try:
