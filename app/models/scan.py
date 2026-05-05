@@ -16,4 +16,9 @@ class ScanResponse(BaseModel):
     headers: dict
     risk_level: str 
     osint : dict
+    port_scans : list
     scanned_at: datetime
+
+
+class NetworkScanModel(BaseModel):
+    pass
