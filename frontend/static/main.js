@@ -103,8 +103,6 @@ function buildResults(url, raw, apiData) {
   const tld      = hn.split('.').slice(-1)[0];
   const query    = url.search;
 
-  // --- URL pattern checks (client-side) ---
-
   if (!isHttps)
     findings.push({ sev: 'high', title: 'Unencrypted HTTP', desc: 'Traffic is transmitted in plaintext, exposing users to eavesdropping and man-in-the-middle attacks.', ref: 'CWE-319' });
 
@@ -149,8 +147,6 @@ function buildResults(url, raw, apiData) {
     findings.push({ sev: 'info', title: 'HTTPS Enabled', desc: 'TLS encryption is present. Note: HTTPS alone does not guarantee safety — phishing sites also use TLS certificates.', ref: 'TLS OK' });
 
   // --- Real backend data ---
-
-  // SSL findings
   if (!apiData.ssl.ssl_valid) {
     findings.push({ sev: 'high', title: 'Invalid SSL Certificate', desc: apiData.ssl.error || 'SSL certificate is invalid or could not be verified.', ref: 'TLS' });
   } else if (apiData.ssl.expires_in_days <= 14) {
@@ -159,12 +155,10 @@ function buildResults(url, raw, apiData) {
     findings.push({ sev: 'low', title: `SSL Expiring in ${apiData.ssl.expires_in_days} Days`, desc: 'Certificate expires within 30 days. Renewal should be scheduled soon.', ref: 'TLS' });
   }
 
-  // DNS findings
   if (!apiData.dns.dns_resolves) {
     findings.push({ sev: 'high', title: 'DNS Resolution Failed', desc: apiData.dns.error || 'The domain could not be resolved to an IP address.', ref: 'DNS' });
   }
 
-  // Real header data from backend
   const hdrDefs = [
     { name: 'Content-Security-Policy',   key: 'content-security-policy',   desc: 'Prevents XSS attacks by whitelisting trusted content sources.' },
     { name: 'Strict-Transport-Security', key: 'strict-transport-security', desc: 'Forces HTTPS, preventing SSL-stripping and downgrade attacks.' },
@@ -234,7 +228,6 @@ function renderResults({ findings, headers, info }, raw) {
   $('cLow').textContent  = low;
   $('cInfo').textContent = inf;
 
-  // Findings list
   const sortOrder = { high: 0, medium: 1, low: 2, info: 3 };
   const sorted    = [...findings].sort((a, b) => sortOrder[a.sev] - sortOrder[b.sev]);
 
@@ -263,7 +256,6 @@ function renderResults({ findings, headers, info }, raw) {
     $('findingsList').appendChild(row);
   });
 
-  // Headers
   const presentCount = headers.filter(h => h.present).length;
   const hdrBadge     = presentCount >= 3
     ? 'text-green-400 bg-green-950 border-green-800'
@@ -295,7 +287,6 @@ function renderResults({ findings, headers, info }, raw) {
     $('headerList').appendChild(row);
   });
 
-  // URL breakdown
   $('urlBreakdown').innerHTML = '';
   Object.entries(info).forEach(([k, v]) => {
     const cell = document.createElement('div');
