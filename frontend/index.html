@@ -1,219 +1,221 @@
-
-<!-- NOTE: PURELY VIBE CODED UI != FRONTEND DEV -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Apollo</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        fontFamily: {
-          sans: ['Geist', 'sans-serif'],
-          mono: ['Geist Mono', 'monospace'],
-        },
-        colors: {
-          zinc: {
-            925: '#09090b',
-            875: '#111113',
-            825: '#18181b',
-          }
-        },
-        keyframes: {
-          slideIn: { from: { opacity: 0, transform: 'translateY(4px)' }, to: { opacity: 1, transform: 'none' } },
-          fadeUp:  { from: { opacity: 0, transform: 'translateY(6px)' }, to: { opacity: 1, transform: 'none' } },
-          spin:    { to: { transform: 'rotate(360deg)' } },
-          shimPbar:{ '0%,100%': { opacity: 0.4 }, '50%': { opacity: 1 } },
-        },
-        animation: {
-          slideIn: 'slideIn 0.2s ease forwards',
-          fadeUp:  'fadeUp 0.3s ease forwards',
-          spin:    'spin 0.85s linear infinite',
-          shimPbar:'shimPbar 1.2s ease-in-out infinite',
-        }
-      }
-    }
-  }
-</script>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Apollo Security Scanner</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Geist:wght@400;500;600;700&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Geist',sans-serif;font-size:14px;background:#09090b;color:#fafafa;-webkit-font-smoothing:antialiased;min-height:100vh}
+  .mono{font-family:'Geist Mono',monospace}
+  input,button{font-family:'Geist',sans-serif}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes shimPbar{0%,100%{opacity:.4}50%{opacity:1}}
+  @keyframes pulse{0%,100%{opacity:.5}50%{opacity:.15}}
+  @keyframes dash{to{stroke-dashoffset:-20}}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  .animate-spin{animation:spin .85s linear infinite}
+  .ping{animation:pulse 2s ease-in-out infinite}
+  .edge{stroke-dasharray:4 4;animation:dash 1.6s linear infinite}
+  .edge-you{stroke-dasharray:4 4;animation:dash 1s linear infinite}
+  .node-g{cursor:pointer}
+  .node-g circle.ring{transition:r .18s,opacity .18s}
+  .node-g:hover circle.ring{r:22;opacity:.35}
+  .hidden{display:none!important}
+</style>
 </head>
-<body class="bg-zinc-950 text-zinc-50 font-sans text-sm antialiased min-h-screen">
+<body>
 
-<div class="max-w-xl mx-auto px-4 py-12 pb-20">
+<div style="max-width:580px;margin:0 auto;padding:2rem 1rem 5rem">
 
   <!-- Header -->
-  <div class="mb-7 animate-fadeUp">
-    <div class="flex items-center gap-2 mb-3">
+  <div style="margin-bottom:1.75rem;animation:fadeUp .3s ease">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
       <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-        <path d="M10 2L3 5.5v5c0 4.142 3.134 8.02 7 9 3.866-.98 7-4.858 7-9v-5L10 2z"
-          stroke="#3b82f6" stroke-width="1.5" stroke-linejoin="round"/>
-        <path d="M7 10.5l2.2 2.2 3.8-4.4" stroke="#3b82f6" stroke-width="1.5"
-          stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M10 2L3 5.5v5c0 4.142 3.134 8.02 7 9 3.866-.98 7-4.858 7-9v-5L10 2z" stroke="#3b82f6" stroke-width="1.5" stroke-linejoin="round"/>
+        <path d="M7 10.5l2.2 2.2 3.8-4.4" stroke="#3b82f6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
-      <span class="font-mono text-xs text-zinc-500 tracking-wider">Apollo / v1</span>
+      <span class="mono" style="font-size:11px;color:#71717a;letter-spacing:.08em">Apollo / v2</span>
     </div>
-    <h1 class="text-3xl font-bold tracking-tight text-zinc-50 leading-tight">URL Security Scanner</h1>
-    <p class="mt-1.5 text-zinc-500 text-[13px] leading-relaxed">
-      Analyze any URL for vulnerabilities, misconfigurations, and threat indicators.
-    </p>
+    <h1 style="font-size:28px;font-weight:700;letter-spacing:-.02em;line-height:1.2;color:#fafafa">Security Scanner</h1>
+    <p style="margin-top:6px;color:#71717a;font-size:13px;line-height:1.6">Analyze any URL for vulnerabilities, misconfigurations, and threat indicators.</p>
   </div>
 
   <!-- Input card -->
-  <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5 mb-3">
-    <label class="block font-mono text-[10px] font-medium text-zinc-500 uppercase tracking-widest mb-2">
-      Target URL
-    </label>
-    <div class="flex gap-2">
+  <div id="inputCard" style="background:#18181b;border:.5px solid #27272a;border-radius:12px;padding:20px;margin-bottom:12px">
+    <label class="mono" style="display:block;font-size:10px;font-weight:500;color:#71717a;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px">Target URL</label>
+    <div style="display:flex;gap:8px">
       <input id="urlInput" type="text" placeholder="https://example.com" autocomplete="off" spellcheck="false"
-        class="flex-1 bg-zinc-950 border border-zinc-800 text-zinc-100 font-mono text-[13px]
-               rounded-lg px-3.5 py-2.5 outline-none placeholder-zinc-700
-               focus:border-zinc-600 focus:ring-2 focus:ring-white/5 transition-all" />
+        style="flex:1;background:#09090b;border:.5px solid #27272a;color:#fafafa;font-family:'Geist Mono',monospace;font-size:13px;border-radius:8px;padding:10px 14px;outline:none;transition:border .15s"
+        onfocus="this.style.borderColor='#52525b'" onblur="this.style.borderColor='#27272a'"/>
       <button id="scanBtn" onclick="startScan()"
-        class="bg-zinc-50 text-zinc-950 font-semibold text-[13px] tracking-tight
-               px-5 py-2.5 rounded-lg whitespace-nowrap
-               hover:bg-white transition-opacity disabled:opacity-30 disabled:cursor-not-allowed
-               active:scale-[0.98]">
-        Scan
-      </button>
+        style="background:#fafafa;color:#09090b;font-weight:600;font-size:13px;letter-spacing:-.01em;padding:10px 20px;border-radius:8px;border:none;cursor:pointer;white-space:nowrap;transition:opacity .15s"
+        onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Scan</button>
     </div>
-    <div class="flex gap-1.5 mt-3 flex-wrap">
-      <button onclick="setUrl('https://example.com')"
-        class="bg-zinc-825 border border-zinc-800 text-zinc-500 font-mono text-[11px]
-               px-2.5 py-1 rounded-md hover:border-zinc-600 hover:text-zinc-300 transition-all">
-        example.com
-      </button>
-      <button onclick="setUrl('http://neverssl.com')"
-        class="bg-zinc-825 border border-zinc-800 text-zinc-500 font-mono text-[11px]
-               px-2.5 py-1 rounded-md hover:border-zinc-600 hover:text-zinc-300 transition-all">
-        no-ssl demo
-      </button>
-      <button onclick="setUrl('https://login-paypal-secure.xyz/verify?redirect=http://evil.com')"
-        class="bg-zinc-825 border border-zinc-800 text-zinc-500 font-mono text-[11px]
-               px-2.5 py-1 rounded-md hover:border-zinc-600 hover:text-zinc-300 transition-all">
-        phishing demo
-      </button>
-      <button onclick="setUrl('https://site.com?q=<script>alert(1)</script>')"
-        class="bg-zinc-825 border border-zinc-800 text-zinc-500 font-mono text-[11px]
-               px-2.5 py-1 rounded-md hover:border-zinc-600 hover:text-zinc-300 transition-all">
-        xss demo
+    <div style="display:flex;gap:6px;margin-top:12px;flex-wrap:wrap">
+      <button onclick="setUrl('https://example.com')" style="background:#18181b;border:.5px solid #27272a;color:#71717a;font-family:'Geist Mono',monospace;font-size:11px;padding:4px 10px;border-radius:6px;cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='#52525b';this.style.color='#d4d4d8'" onmouseout="this.style.borderColor='#27272a';this.style.color='#71717a'">example.com</button>
+      <button onclick="setUrl('http://neverssl.com')" style="background:#18181b;border:.5px solid #27272a;color:#71717a;font-family:'Geist Mono',monospace;font-size:11px;padding:4px 10px;border-radius:6px;cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='#52525b';this.style.color='#d4d4d8'" onmouseout="this.style.borderColor='#27272a';this.style.color='#71717a'">no-ssl demo</button>
+      <button onclick="setUrl('https://login-paypal-secure.xyz/verify?redirect=http://evil.com')" style="background:#18181b;border:.5px solid #27272a;color:#71717a;font-family:'Geist Mono',monospace;font-size:11px;padding:4px 10px;border-radius:6px;cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='#52525b';this.style.color='#d4d4d8'" onmouseout="this.style.borderColor='#27272a';this.style.color='#71717a'">phishing demo</button>
+      <button onclick="setUrl(`https://site.com?q=<script>alert(1)</script>`)" style="background:#18181b;border:.5px solid #27272a;color:#71717a;font-family:'Geist Mono',monospace;font-size:11px;padding:4px 10px;border-radius:6px;cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='#52525b';this.style.color='#d4d4d8'" onmouseout="this.style.borderColor='#27272a';this.style.color='#71717a'">xss demo</button>
+      <button onclick="runNetworkScan()" style="background:#2563eb;border:.5px solid rgba(59,130,246,.4);color:#fff;font-family:'Geist Mono',monospace;font-size:11px;padding:4px 10px;border-radius:6px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .15s" onmouseover="this.style.background='#3b82f6'" onmouseout="this.style.background='#2563eb'">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.3"/><circle cx="5" cy="5" r="1.5" fill="currentColor"/><path d="M5 1v1M5 8v1M1 5h1M8 5h1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        Run network scan
       </button>
     </div>
   </div>
 
-  <!-- Scanning view -->
-  <div id="scanView" class="hidden bg-zinc-900 border border-zinc-800 rounded-xl p-5 mb-3">
-    <div class="flex items-center gap-2.5 mb-4">
-      <svg class="animate-spin shrink-0" width="14" height="14" viewBox="0 0 14 14" fill="none">
+  <!-- URL Scanning progress -->
+  <div id="scanView" style="display:none;background:#18181b;border:.5px solid #27272a;border-radius:12px;padding:20px;margin-bottom:12px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+      <svg class="animate-spin" style="flex-shrink:0" width="14" height="14" viewBox="0 0 14 14" fill="none">
         <circle cx="7" cy="7" r="5.5" stroke="#27272a" stroke-width="2.2"/>
         <path d="M7 1.5a5.5 5.5 0 0 1 5.5 5.5" stroke="#3b82f6" stroke-width="2.2" stroke-linecap="round"/>
       </svg>
-      <span class="text-[13px] font-medium text-zinc-100">Scanning</span>
-      <span id="scanTarget" class="font-mono text-[11px] text-zinc-500 ml-auto truncate max-w-[200px]"></span>
+      <span style="font-size:13px;font-weight:500;color:#fafafa">Scanning</span>
+      <span id="scanTarget" class="mono" style="font-size:11px;color:#71717a;margin-left:auto;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
     </div>
-    <div id="scanBars" class="flex flex-col gap-2 mb-4"></div>
-    <div id="termLines" class="flex flex-col gap-0.5 min-h-[52px]"></div>
+    <div id="scanBars" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px"></div>
+    <div id="termLines" style="display:flex;flex-direction:column;gap:2px;min-height:52px"></div>
   </div>
 
-  <!-- Results -->
-  <div id="resultsView" class="hidden">
-
-    <!-- Summary -->
-    <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5 mb-3 animate-fadeUp">
-      <div class="flex items-center gap-4">
-        <!-- Ring -->
-        <div class="relative w-20 h-20 shrink-0">
-          <svg width="80" height="80" viewBox="0 0 80 80" style="transform:rotate(-90deg);position:absolute;inset:0;">
+  <!-- URL Results -->
+  <div id="resultsView" style="display:none">
+    <div style="background:#18181b;border:.5px solid #27272a;border-radius:12px;padding:20px;margin-bottom:12px;animation:fadeUp .3s ease">
+      <div style="display:flex;align-items:center;gap:16px">
+        <div style="position:relative;width:80px;height:80px;flex-shrink:0">
+          <svg width="80" height="80" viewBox="0 0 80 80" style="transform:rotate(-90deg);position:absolute;inset:0">
             <circle cx="40" cy="40" r="33" fill="none" stroke="#27272a" stroke-width="5"/>
-            <circle id="ringArc" cx="40" cy="40" r="33" fill="none" stroke="#3b82f6"
-              stroke-width="5" stroke-linecap="round"
-              stroke-dasharray="207.3" stroke-dashoffset="207.3"
-              style="transition:stroke-dashoffset 1.1s cubic-bezier(0.4,0,0.2,1),stroke 0.5s;"/>
+            <circle id="ringArc" cx="40" cy="40" r="33" fill="none" stroke="#3b82f6" stroke-width="5" stroke-linecap="round" stroke-dasharray="207.3" stroke-dashoffset="207.3" style="transition:stroke-dashoffset 1.1s cubic-bezier(.4,0,.2,1),stroke .5s"/>
           </svg>
-          <div class="absolute inset-0 flex flex-col items-center justify-center">
-            <span id="scoreNum" class="text-[22px] font-bold tracking-tight text-zinc-50">—</span>
-            <span class="font-mono text-[9px] text-zinc-500">/100</span>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+            <span id="scoreNum" style="font-size:22px;font-weight:700;letter-spacing:-.03em;color:#fafafa">—</span>
+            <span class="mono" style="font-size:9px;color:#71717a">/100</span>
           </div>
         </div>
-
-        <div class="flex-1 min-w-0">
-          <div class="flex items-center gap-2 mb-1 flex-wrap">
-            <span id="riskTitle" class="text-[15px] font-semibold tracking-tight text-zinc-50"></span>
-            <span id="riskBadge" class="font-mono text-[10px] font-medium px-1.5 py-0.5 rounded border uppercase tracking-widest"></span>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap">
+            <span id="riskTitle" style="font-size:15px;font-weight:600;letter-spacing:-.01em;color:#fafafa"></span>
+            <span id="riskBadge" class="mono" style="font-size:10px;font-weight:500;padding:2px 7px;border-radius:4px;text-transform:uppercase;letter-spacing:.06em"></span>
           </div>
-          <p id="summaryText" class="text-[12px] text-zinc-500 leading-relaxed"></p>
-          <p id="urlDisplay" class="font-mono text-[10px] text-zinc-700 mt-1.5 truncate"></p>
+          <p id="summaryText" style="font-size:12px;color:#71717a;line-height:1.6"></p>
+          <p id="urlDisplay" class="mono" style="font-size:10px;color:#3f3f46;margin-top:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></p>
         </div>
       </div>
-
-      <!-- Stats -->
-      <div class="grid grid-cols-4 gap-2 mt-4 pt-4 border-t border-zinc-800">
-        <div class="bg-zinc-950 border border-zinc-800 rounded-lg p-3 text-center">
-          <div id="cHigh" class="text-[20px] font-bold tracking-tight text-red-500">0</div>
-          <div class="text-[11px] text-zinc-500 mt-0.5">Critical</div>
-        </div>
-        <div class="bg-zinc-950 border border-zinc-800 rounded-lg p-3 text-center">
-          <div id="cMed" class="text-[20px] font-bold tracking-tight text-amber-500">0</div>
-          <div class="text-[11px] text-zinc-500 mt-0.5">Warning</div>
-        </div>
-        <div class="bg-zinc-950 border border-zinc-800 rounded-lg p-3 text-center">
-          <div id="cLow" class="text-[20px] font-bold tracking-tight text-zinc-400">0</div>
-          <div class="text-[11px] text-zinc-500 mt-0.5">Low</div>
-        </div>
-        <div class="bg-zinc-950 border border-zinc-800 rounded-lg p-3 text-center">
-          <div id="cInfo" class="text-[20px] font-bold tracking-tight text-blue-400">0</div>
-          <div class="text-[11px] text-zinc-500 mt-0.5">Info</div>
-        </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px;padding-top:16px;border-top:.5px solid #27272a">
+        <div style="background:#09090b;border:.5px solid #27272a;border-radius:8px;padding:12px;text-align:center"><div id="cHigh" style="font-size:20px;font-weight:700;color:#ef4444">0</div><div style="font-size:11px;color:#71717a;margin-top:2px">Critical</div></div>
+        <div style="background:#09090b;border:.5px solid #27272a;border-radius:8px;padding:12px;text-align:center"><div id="cMed" style="font-size:20px;font-weight:700;color:#f59e0b">0</div><div style="font-size:11px;color:#71717a;margin-top:2px">Warning</div></div>
+        <div style="background:#09090b;border:.5px solid #27272a;border-radius:8px;padding:12px;text-align:center"><div id="cLow" style="font-size:20px;font-weight:700;color:#a1a1aa">0</div><div style="font-size:11px;color:#71717a;margin-top:2px">Low</div></div>
+        <div style="background:#09090b;border:.5px solid #27272a;border-radius:8px;padding:12px;text-align:center"><div id="cInfo" style="font-size:20px;font-weight:700;color:#60a5fa">0</div><div style="font-size:11px;color:#71717a;margin-top:2px">Info</div></div>
       </div>
     </div>
-
-    <!-- Findings -->
-    <div class="bg-zinc-900 border border-zinc-800 rounded-xl mb-3 overflow-hidden animate-fadeUp">
-      <div class="flex items-center justify-between px-4 pt-4 pb-2">
-        <span class="text-[13px] font-semibold tracking-tight">Findings</span>
-        <span id="findingsCount" class="font-mono text-[11px] text-zinc-500"></span>
+    <div style="background:#18181b;border:.5px solid #27272a;border-radius:12px;margin-bottom:12px;overflow:hidden;animation:fadeUp .3s ease">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 16px 8px">
+        <span style="font-size:13px;font-weight:600">Findings</span>
+        <span id="findingsCount" class="mono" style="font-size:11px;color:#71717a"></span>
       </div>
       <div id="findingsList"></div>
     </div>
-
-    <!-- Headers -->
-    <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5 mb-3 animate-fadeUp">
-      <div class="flex items-center justify-between mb-3.5">
-        <span class="text-[13px] font-semibold tracking-tight">Security Headers</span>
-        <span id="hdrScore" class="font-mono text-[10px] font-medium px-1.5 py-0.5 rounded border uppercase tracking-widest"></span>
+    <div style="background:#18181b;border:.5px solid #27272a;border-radius:12px;padding:20px;margin-bottom:12px;animation:fadeUp .3s ease">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <span style="font-size:13px;font-weight:600">Security Headers</span>
+        <span id="hdrScore" class="mono" style="font-size:10px;font-weight:500;padding:2px 7px;border-radius:4px;text-transform:uppercase;letter-spacing:.06em"></span>
       </div>
-      <div id="headerList" class="flex flex-col"></div>
+      <div id="headerList" style="display:flex;flex-direction:column"></div>
     </div>
-
-    <!-- OSINT / Infrastructure -->
-    <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5 mb-3 animate-fadeUp">
-      <div class="flex items-center justify-between mb-3.5">
-        <span class="text-[13px] font-semibold tracking-tight">Infrastructure</span>
-        <span id="osintBadge" class="font-mono text-[10px] font-medium px-1.5 py-0.5 rounded border uppercase tracking-widest text-zinc-400 bg-zinc-800 border-zinc-700">
-          OSINT
-        </span>
+    <div style="background:#18181b;border:.5px solid #27272a;border-radius:12px;padding:20px;margin-bottom:12px;animation:fadeUp .3s ease">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <span style="font-size:13px;font-weight:600">Infrastructure</span>
+        <span class="mono" style="font-size:10px;padding:2px 7px;border-radius:4px;text-transform:uppercase;letter-spacing:.06em;color:#a1a1aa;background:#27272a;border:.5px solid #3f3f46">OSINT</span>
       </div>
-
-      <div id="osintGrid" class="grid grid-cols-2 gap-2"></div>
+      <div id="osintGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px"></div>
     </div>
-
-    <!-- URL Breakdown -->
-    <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5 mb-5 animate-fadeUp">
-      <div class="text-[13px] font-semibold tracking-tight mb-3.5">URL Breakdown</div>
-      <div id="urlBreakdown" class="grid grid-cols-2 gap-2"></div>
+    <div style="background:#18181b;border:.5px solid #27272a;border-radius:12px;padding:20px;margin-bottom:20px;animation:fadeUp .3s ease">
+      <div style="font-size:13px;font-weight:600;margin-bottom:14px">URL Breakdown</div>
+      <div id="urlBreakdown" style="display:grid;grid-template-columns:1fr 1fr;gap:8px"></div>
     </div>
+    <div style="background:#18181b;border:.5px solid #27272a;border-radius:12px;padding:20px;margin-bottom:12px">
+      <div style="font-size:13px;font-weight:600;margin-bottom:14px">Open Ports</div>
+      <div id="portList"></div>
+    </div>
+    <button onclick="resetAll()" style="width:100%;background:transparent;border:.5px solid #27272a;color:#71717a;font-weight:500;font-size:13px;padding:10px;border-radius:8px;cursor:pointer;transition:all .15s" onmouseover="this.style.background='#18181b';this.style.color='#e4e4e7';this.style.borderColor='#3f3f46'" onmouseout="this.style.background='transparent';this.style.color='#71717a';this.style.borderColor='#27272a'">↩ &nbsp;Scan another</button>
+  </div>
 
-    <button onclick="resetScan()"
-      class="w-full bg-transparent border border-zinc-800 text-zinc-500 font-medium text-[13px]
-             py-2.5 rounded-lg hover:bg-zinc-825 hover:text-zinc-200 hover:border-zinc-700 transition-all">
-      ↩ &nbsp;Scan another URL
-    </button>
+  <!-- Network scan view -->
+  <div id="netScanView" style="display:none;background:#18181b;border:.5px solid #27272a;border-radius:12px;margin-bottom:12px;overflow:hidden;animation:fadeUp .3s ease">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px;border-bottom:.5px solid #27272a">
+      <div style="display:flex;align-items:center;gap:8px">
+        <svg id="netSpinner" class="animate-spin" style="display:none;flex-shrink:0" width="13" height="13" viewBox="0 0 14 14" fill="none">
+          <circle cx="7" cy="7" r="5.5" stroke="#27272a" stroke-width="2.2"/>
+          <path d="M7 1.5a5.5 5.5 0 0 1 5.5 5.5" stroke="#3b82f6" stroke-width="2.2" stroke-linecap="round"/>
+        </svg>
+        <span style="font-size:13px;font-weight:600">Local Network</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span id="netSubnet" class="mono" style="font-size:10px;color:#71717a"></span>
+        <span id="netDeviceCount" class="mono" style="display:none;font-size:10px;font-weight:500;padding:2px 7px;border-radius:4px;border:.5px solid #3f3f46;color:#a1a1aa;background:rgba(39,39,42,.6)"></span>
+      </div>
+    </div>
+    <div id="netLocalIp" style="display:none;align-items:center;gap:8px;padding:10px 16px;border-bottom:.5px solid rgba(39,39,42,.6);background:rgba(59,130,246,.05)">
+      <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><circle cx="5.5" cy="5.5" r="4.5" stroke="#3b82f6" stroke-width="1.3"/><circle cx="5.5" cy="5.5" r="1.5" fill="#3b82f6"/></svg>
+      <span class="mono" style="font-size:11px;color:#a1a1aa">This machine</span>
+      <span id="netLocalIpVal" class="mono" style="font-size:11px;color:#60a5fa;margin-left:auto"></span>
+    </div>
+    <div id="netError" style="display:none;padding:16px;background:rgba(239,68,68,.07);border-bottom:.5px solid rgba(239,68,68,.2)">
+      <span style="font-size:12px;color:#ef4444;font-family:'Geist Mono',monospace">Error: </span>
+      <span id="netErrorMsg" style="font-size:12px;color:#fca5a5"></span>
+    </div>
+    <div id="netScanPlaceholder" style="padding:32px 16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+      <div style="display:flex;gap:4px">
+        <span style="width:6px;height:6px;border-radius:50%;background:#3f3f46;animation:shimPbar 1.2s ease-in-out infinite;animation-delay:0s;display:inline-block"></span>
+        <span style="width:6px;height:6px;border-radius:50%;background:#3f3f46;animation:shimPbar 1.2s ease-in-out infinite;animation-delay:.2s;display:inline-block"></span>
+        <span style="width:6px;height:6px;border-radius:50%;background:#3f3f46;animation:shimPbar 1.2s ease-in-out infinite;animation-delay:.4s;display:inline-block"></span>
+      </div>
+      <span class="mono" style="font-size:11px;color:#52525b">Sweeping subnet…</span>
+    </div>
+    <div id="netDeviceList" style="display:none;flex-direction:column;border-top:.5px solid #27272a"></div>
+    <div id="netMapContainer" style="display:none;padding:16px;border-top:.5px solid #27272a">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="width:8px;height:8px;border-radius:50%;background:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.2)"></div>
+          <span style="font-size:13px;font-weight:500;color:#fafafa">Network map</span>
+          <span id="mapSubnet" class="mono" style="font-size:11px;color:#71717a;background:#27272a;padding:2px 8px;border-radius:4px;border:.5px solid #3f3f46"></span>
+        </div>
+        <span id="mapDevCount" style="font-size:12px;color:#71717a"></span>
+      </div>
+      <div id="legendItems" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;padding:10px 12px;background:#27272a;border:.5px solid #3f3f46;border-radius:8px;font-size:11px;color:#71717a"></div>
+      <div style="background:#27272a;border:.5px solid #3f3f46;border-radius:12px;overflow:hidden">
+        <svg id="netsvg" width="100%" viewBox="0 0 640 400" role="img">
+          <title>Local network topology map</title>
+          <defs>
+            <radialGradient id="bg-g" cx="50%" cy="50%"><stop offset="0%" stop-color="#3b82f6" stop-opacity=".05"/><stop offset="100%" stop-color="#3b82f6" stop-opacity="0"/></radialGradient>
+            <pattern id="dots" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="12" cy="12" r=".8" fill="#3f3f46" opacity=".5"/></pattern>
+          </defs>
+          <rect x="0" y="0" width="640" height="400" fill="url(#dots)"/>
+          <ellipse cx="320" cy="200" rx="190" ry="155" fill="url(#bg-g)"/>
+        </svg>
+      </div>
+      <div id="detail-card" style="display:none;margin-top:10px;background:#09090b;border:.5px solid #27272a;border-radius:10px;overflow:hidden;animation:fadeIn .2s ease both">
+        <div style="padding:10px 14px;border-bottom:.5px solid #27272a;display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div id="dc-dot" style="width:8px;height:8px;border-radius:50%"></div>
+            <span id="dc-ip" class="mono" style="font-size:13px;font-weight:500;color:#fafafa"></span>
+            <span id="dc-badge" class="mono" style="font-size:10px;padding:2px 7px;border-radius:4px"></span>
+          </div>
+          <button onclick="document.getElementById('detail-card').style.display='none'" style="background:none;border:none;color:#71717a;cursor:pointer;font-size:18px;line-height:1;padding:0 4px">×</button>
+        </div>
+        <div id="dc-body" style="padding:10px 14px;display:grid;grid-template-columns:auto 1fr;gap:5px 20px;font-size:12px"></div>
+      </div>
+      <div id="map-legend" style="display:flex;gap:16px;margin-top:10px;flex-wrap:wrap"></div>
+    </div>
+    <div style="padding:16px;border-top:.5px solid #27272a">
+      <button onclick="resetAll()" style="width:100%;background:transparent;border:.5px solid #27272a;color:#71717a;font-weight:500;font-size:13px;padding:10px;border-radius:8px;cursor:pointer;transition:all .15s" onmouseover="this.style.background='#27272a';this.style.color='#e4e4e7';this.style.borderColor='#3f3f46'" onmouseout="this.style.background='transparent';this.style.color='#71717a';this.style.borderColor='#27272a'">↩ &nbsp;Scan another</button>
+    </div>
   </div>
 
 </div>
-<script src="./static/main.js"></script>
+
+<script src="./static/main.js"> </script>
 </body>
 </html>
