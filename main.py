@@ -2,20 +2,20 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api import scans
-# from app.config.settings import settings
+from app.config.settings import settings
 
 
 # Create metadata for /docs
 
 app = FastAPI( 
-    title="URL Scanner API",
-    description="Scans URLs for vulnerabilities",
-    version="1.0.0",
+    title=settings.APP_NAME,
+    description=settings.DESCRIPTION,
+    version=settings.VERSION,
 )
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=settings.ALLOWED_ORIGINS,
     allow_methods=["*"],
     allow_headers=["*"],
 )
