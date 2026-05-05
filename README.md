@@ -32,6 +32,7 @@ apollo/
 │   └── api/
 │       └── scans.py             # POST /scans/ route
 └── frontend/
+    └── static/ main.js          # All JS functions
     └── index.html               # Frontend UI
 ```
 
