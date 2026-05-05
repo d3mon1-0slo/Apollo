@@ -15,4 +15,5 @@ class ScanResponse(BaseModel):
     dns: dict
     headers: dict
     risk_level: str 
+    osint : dict
     scanned_at: datetime
