@@ -23,7 +23,7 @@ apollo/
 │   ├── core/
 │   │   └── checks/
 │   │       ├── ssl.py           # SSLChecker — validates cert and expiry
-│   │       ├── dns.py           # DNSChecker — resolves hostname to IP
+│   │       ├── osint.py         # OSINTChecker — Check the hostname for footprints
 │   │       └── headers.py       # HeaderChecker — probes HTTP security headers
 │   ├── core/
 │   │   └── scanner.py           # ScannerFacade — orchestrates all checks
