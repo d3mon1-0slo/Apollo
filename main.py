@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api import scans
-from app.api import  network_endpoint
 
 
 from app.config.settings import settings
@@ -24,7 +23,6 @@ app.add_middleware(
 )
 
 app.include_router(scans.router, prefix="/scans", tags=["scan"])
-# app.include_router(network_endpoint.router, prefix="/network", tags=["network"])
 
 
 @app.on_event("startup")
