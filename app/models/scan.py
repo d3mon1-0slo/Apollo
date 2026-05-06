@@ -18,7 +18,3 @@ class ScanResponse(BaseModel):
     osint : dict
     port_scans : list
     scanned_at: datetime
-
-
-class NetworkScanModel(BaseModel):
-    pass
