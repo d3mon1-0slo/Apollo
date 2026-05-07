@@ -1,5 +1,7 @@
 # Apollo
 
+Disclaimer: This project is intended solely for practice and development purposes. Any use beyond that is up to the user’s discretion.
+
 A URL security scanner that analyzes any given URL for SSL validity, DNS resolution, and missing HTTP security headers — returning a structured risk assessment via a REST API.
 
 ---
