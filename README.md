@@ -1,7 +1,5 @@
 # Apollo
 
-> ⚠️ Work in progress — not production ready.
-
 A URL security scanner that analyzes any given URL for SSL validity, DNS resolution, and missing HTTP security headers — returning a structured risk assessment via a REST API.
 
 ---
@@ -109,6 +107,49 @@ Scans a URL and returns a full security risk assessment.
   },
   "risk_level": "medium",
   "scanned_at": "2026-05-05T00:00:00.000000"
+  "osint": {
+        "whois": {
+            "ip": "93.184.216.34",
+            "asn": "29802",
+            "org": "LAX2-46-21-150-0-24",
+            "country": "US",
+            "creation_date": "None",
+            "age_days": null,
+            "risk_flag": false
+        },
+        "reputation": {
+            "ip": "93.184.216.34",
+            "country": "United States",
+            "isp": "HIVELOCITY, Inc.",
+            "org": "",
+            "is_proxy": false,
+            "risk_flag": false
+        },
+        "server_info": {
+            "server": "nginx",
+            "powered_by": "PHP/8.2.30",
+            "risk_flag": true,
+            "risk_reason": "Server info exposed — attackers can fingerprint your stack"
+        }
+    },
+    "port_scans": [
+        {
+            "port": 53,
+            "label": "DNS",
+            "open": true
+        },
+        {
+            "port": 80,
+            "label": "HTTP",
+            "open": true
+        },
+        {
+            "port": 443,
+            "label": "HTTPS",
+            "open": true
+        }
+    ],
+    "scanned_at": "2026-05-07T11:38:18.126700Z"
 }
 ```
 
