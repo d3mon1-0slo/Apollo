@@ -215,3 +215,6 @@ FastAPI provides built-in docs at:
 
 - Swagger UI — `http://127.0.0.1:8000/docs`
 - ReDoc — `http://127.0.0.1:8000/redoc`
+
+ps:
+I did not enhance any security on this project yet.
